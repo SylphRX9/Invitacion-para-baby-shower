@@ -61,12 +61,13 @@ body{
 }
 
 /* ====== CONTENIDO CENTRAL ====== */
-.center{
-  position:fixed; inset:0;
-  display:grid; place-items:center;
-  z-index:2;
-  padding:20px;
-  overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+.center {
+  display: grid;
+  place-items: center; /* centra vertical y horizontal */
+  min-height: 100vh;   /* ocupa toda la altura de la pantalla */
+  padding: 20px;
+  overflow-y: auto;    /* permite scroll si el contenido es más grande */
+  z-index: 2;
 }
 
 /* Intro */
@@ -200,8 +201,10 @@ body{
 @media (max-width:768px){
   .center {
     padding: 15px;
-    align-items: flex-start; /* Alinea al inicio para móviles */
+    min-height: 100vh;  /* asegura que siempre ocupe toda la altura */
+    place-items: center; /* sigue centrado en móviles */
   }
+}
   
   .hoja {
     width: 95vw;
