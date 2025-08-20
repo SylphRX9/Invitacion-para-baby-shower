@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Baby Shower • Invitación</title>
+<style>
+  :root{
+    --rosa:#ff4d8d;
+    --azul:#1e90ff;
+    --papel:#fff8f2;
+    --cielo:#eaf6ff;
+    --negro:#1f2937;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: #ffffff;
+    overflow:hidden;
+    color:#263238;
+  }
+
+  /* ====== FONDO ESPIRAL (SVG fijo) ====== */
+  #bg-spiral{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    opacity:.25;
+  }
+
+  /* ====== BURBUJAS ====== */
+  #burbujas{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+  .burbuja{
+    position:absolute; bottom:-80px;
+    width: var(--s,32px); height: var(--s,32px);
+    opacity: .5;
+    animation: subir var(--dur,10s) linear infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes subir{
+    0%{ transform: translate(var(--x,0), 0) scale(1); opacity:.2; }
+    10%{ opacity:.6; }
+    100%{ transform: translate(calc(var(--x,0) + var(--drift, 120px)), -120vh) scale(1.1); opacity:0; }
+  }
+
+  /* ====== PATITOS (SVG) ====== */
+  #patos{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+  .pato{
+    position:absolute; top:-80px;
+    width:64px; height:48px;
+    animation: caer 12s linear infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes caer{
+    0%{ transform: translateY(-10vh) rotate(0deg); opacity:.9; }
+    100%{ transform: translateY(120vh) rotate(45deg); opacity:.2; }
+  }
+
+  /* ====== CONTENIDO CENTRAL ====== */
+  .center{
+    position:fixed; inset:0;
+    display:grid; place-items:center;
+    z-index:2;
+    padding:20px;
+  }
+
+  /* Intro */
+  #intro{ text-align:center; }
+  #emojiSobre{
+    font-size:110px; line-height:1;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,.15));
+    display:block;
+  }
+  .shake{ animation: shake .6s ease; }
+  @keyframes shake{
+    0%{ transform: translateX(0) }
+    25%{ transform: translateX(-10px) rotate(-8deg) }
+    50%{ transform: translateX(10px) rotate(8deg) }
+    75%{ transform: translateX(-6px) rotate(-6deg) }
+    100%{ transform: translateX(0) }
+  }
+  .btn{
+    margin-top:16px;
+    padding:14px 26px;
+    border:none; border-radius:28px;
+    font-size:18px; font-weight:700; cursor:pointer;
+    background: linear-gradient(135deg, var(--rosa), var(--azul));
+    color:#fff;
+    box-shadow:0 10px 24px rgba(30,144,255,.35);
+    transition:.2s;
+  }
+  .btn:hover{ transform: translateY(-1px); filter:brightness(1.05); }
+
+  /* FLASH */
+  #flash{position:fixed; inset:0; background:white; opacity:0; z-index:3; pointer-events:none; transition: opacity 1.2s ease;}
+  #flash.mostrar{ opacity:1; }
+
+  /* ====== HOJAS ====== */
+  #paginas{ display:none; }
+  .hoja{
+    width:min(92vw,760px);
+    background:var(--papel);
+    border-radius:20px;
+    padding:28px 24px 22px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.18);
+    text-align:center;
+  }
+  .titulo{
+    font-size:28px; font-weight:800; letter-spacing:.5px;
+    margin:0 0 12px;
+    color:#0f172a;
+  }
+  .sub{ margin:0 0 8px; color:#334155; }
+
+  .navegacion{
+    margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+  }
+  .navbtn{
+    padding:10px 18px; border:none; border-radius:20px;
+    background:#b3d9ff; color:#0b3a78; cursor:pointer; font-weight:700;
+    transition:.2s;
+  }
+  .navbtn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
+
+  /* ====== VOTACIONES ====== */
+  .voto-wrap{
+    display:grid; grid-template-columns: 1fr 1fr; gap:18px;
+    margin-top:10px; align-items:end;
+  }
+  .barra{
+    position:relative;
+    height:220px;
+    background: #ffffff;
+    border-radius:18px;
+    box-shadow: inset 0 0 0 2px #e5e7eb;
+    display:flex; align-items:flex-end; justify-content:center;
+    padding:12px;
+  }
+  .llenado{
+    width:70%;
+    height: var(--h, 10%);
+    background: var(--color);
+    border-radius:12px;
+    transition: height .35s ease;
+    box-shadow: 0 10px 22px rgba(0,0,0,.12) inset;
+  }
+  .voto-card{
+    margin-top:10px;
+    background:#fff;
+    border-radius:16px;
+    padding:10px 12px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    font-weight:800;
+  }
+  .voto-btn{
+    margin-top:10px;
+    padding:12px 18px;
+    border:none; border-radius:16px;
+    font-weight:800; cursor:pointer;
+    background:#f1f5f9; color:#0f172a;
+    transition:.2s;
+  }
+  .voto-btn:hover{ transform: translateY(-1px); filter:brightness(1.03); }
+  .icon{
+    width:28px; height:28px; display:inline-grid; place-items:center;
+    border-radius:50%;
+    background:#eef2ff;
+  }
+
+  .contador{
+    margin-top:6px; font-size:14px; color:#475569;
+  }
+
+  /* ====== UBICACIÓN botón ====== */
+  .loc-btn{
+    margin-top:10px;
+    display:inline-flex; align-items:center; gap:10px;
+    padding:12px 18px; border:none; border-radius:18px; cursor:pointer; font-weight:800;
+    background:#1e90ff; color:#fff; box-shadow:0 10px 20px rgba(30,144,255,.3);
+  }
+  .loc-btn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
+
+  /* ====== BOTÓN MUTE (arriba) ====== */
+  #muteBtn{
+    position:fixed; top:10px; right:10px; z-index:4;
+    width:44px; height:44px; border:none; border-radius:50%; cursor:pointer;
+    background:#111827; color:#fff; font-size:20px; box-shadow: 0 8px 18px rgba(0,0,0,.25);
+  }
+  #muteBtn:hover{ filter:brightness(1.05); }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width:560px){
+    .voto-wrap{ grid-template-columns: 1fr; }
+    .barra{ height:200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== FONDO ESPIRAL ====== -->
+<svg id="bg-spiral" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="fade" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#fade)"/>
+  <!-- espiral azul -->
+  <path d="
+    M500,500
+    m0,-360
+    a360,360 0 1,1 -0.1,0
+    " fill="none" stroke="#6ec6ff" stroke-width="20" opacity=".35"/>
+  <path d="M500,170
+           C760,170,830,380,830,500
+           S760,830,500,830
+           170,620,170,500
+           240,170,500,170Z" fill="none" stroke="#ffd6e7" stroke-width="20" opacity=".35"/>
+  <!-- trazos interiores para sensación de espiral -->
+  <g opacity=".25" stroke-linecap="round">
+    <path d="M220 500 Q 500 380 780 500" stroke="#6ec6ff" stroke-width="10"/>
+    <path d="M260 500 Q 500 420 740 500" stroke="#ff9dc0" stroke-width="10"/>
+    <path d="M300 500 Q 500 460 700 500" stroke="#6ec6ff" stroke-width="10"/>
+  </g>
+</svg>
+
+<!-- ====== BURBUJAS ====== -->
+<div id="burbujas" aria-hidden="true"></div>
+
+<!-- ====== PATITOS ====== -->
+<div id="patos" aria-hidden="true"></div>
+
+<!-- ====== INTRO ====== -->
+<div class="center" id="intro">
+  <div>
+    <span id="emojiSobre">✉️</span>
+    <button class="btn" id="abrirBtn">¡ABRIR INVITACIÓN!</button>
+  </div>
+</div>
+
+<!-- FLASH -->
+<div id="flash"></div>
+
+<!-- ====== PÁGINAS ====== -->
+<div class="center" id="paginas">
+  <div class="hoja" id="hoja1">
+    <h2 class="titulo">🍼 VOTACIONES</h2>
+    <p class="sub">¡Vota! ¿Será <span style="color:var(--azul);font-weight:800;">NIÑO</span> o <span style="color:var(--rosa);font-weight:800;">NIÑA</span>?</p>
+
+    <div class="voto-wrap">
+      <!-- NIÑO -->
+      <div>
+        <div class="barra">
+          <div class="llenado" id="barAzul" style="--color: rgba(30,144,255,.9); --h:10%"></div>
+        </div>
+        <div class="voto-card">
+          <span class="icon" aria-hidden="true">
+            <!-- Carro (SVG simple) -->
+            <svg viewBox="0 0 64 40" width="24" height="24">
+              <path d="M8 24 L20 12 H44 L56 24 V34 H8 Z" fill="#1e90ff"/>
+              <circle cx="20" cy="34" r="5" fill="#0b3a78"/>
+              <circle cx="44" cy="34" r="5" fill="#0b3a78"/>
+              <rect x="24" y="14" width="14" height="6" fill="#bde0ff" rx="2"/>
+            </svg>
+          </span>
+          <span>NIÑO</span>
+        </div>
+        <button class="voto-btn" id="votaNino">Votar NIÑO</button>
+        <div class="contador"><span id="countNino">0</span> votos</div>
+      </div>
+
+      <!-- NIÑA -->
+      <div>
+        <div class="barra">
+          <div class="llenado" id="barRosa" style="--color: rgba(255,77,141,.9); --h:10%"></div>
+        </div>
+        <div class="voto-card">
+          <span class="icon" aria-hidden="true">
+            <!-- Moño (SVG) -->
+            <svg viewBox="0 0 64 40" width="24" height="24">
+              <path d="M12 20 C6 6, 26 6, 32 18 C38 6, 58 6, 52 20 C58 34, 38 34, 32 22 C26 34, 6 34, 12 20 Z" fill="#ff4d8d"/>
+              <circle cx="32" cy="20" r="5" fill="#ff79a8"/>
+            </svg>
+          </span>
+          <span>NIÑA</span>
+        </div>
+        <button class="voto-btn" id="votaNina">Votar NIÑA</button>
+        <div class="contador"><span id="countNina">0</span> votos</div>
+      </div>
+    </div>
+
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(2)">Siguiente ➜</button>
+    </div>
+  </div>
+
+  <div class="hoja" id="hoja2" style="display:none">
+    <h2 class="titulo">⏰ HORARIO</h2>
+    <p class="sub">Ceremonia: 4:00 PM</p>
+    <p class="sub">Brunch: 5:30 PM</p>
+    <p class="sub">Dinámicas & Juegos: 6:30 PM</p>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(1)">⬅ Anterior</button>
+      <button class="navbtn" onclick="mostrarPagina(3)">Siguiente ➜</button>
+    </div>
+  </div>
+
+  <div class="hoja" id="hoja3" style="display:none">
+    <h2 class="titulo">📍 UBICACIÓN</h2>
+    <p class="sub">¡Nos encantaría verte allí!</p>
+    <button class="loc-btn" onclick="window.open('https://www.google.com/maps','_blank')">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="#fff"/></svg>
+      Abrir en Google Maps
+    </button>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(2)">⬅ Anterior</button>
+      <button class="navbtn" onclick="mostrarPagina(4)">Siguiente ➜</button>
+    </div>
+  </div>
+
+  <div class="hoja" id="hoja4" style="display:none">
+    <h2 class="titulo">✨ ¡TE ESPERAMOS! ✨</h2>
+    <p class="sub">Gracias por ser parte de este momento tan especial 💖</p>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(3)">⬅ Anterior</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="bgMusic" src="DeFondo2.mp3" preload="auto" loop></audio>
+<button id="muteBtn" title="Silenciar/Activar">🔇</button>
+
+<!-- ====== SCRIPTS ====== -->
+<script>
+  /* ====== BURBUJAS DINÁMICAS ====== */
+  const burbujas = document.getElementById('burbujas');
+  for(let i=0;i<24;i++){
+    const b = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    b.setAttribute('viewBox','0 0 64 64');
+    b.classList.add('burbuja');
+    b.style.left = Math.random()*100 + 'vw';
+    b.style.setProperty('--s', (18 + Math.random()*36) + 'px');
+    b.style.setProperty('--x', (-40 + Math.random()*80) + 'px');
+    b.style.setProperty('--drift', (60 + Math.random()*160) + 'px');
+    b.style.setProperty('--dur', (9 + Math.random()*7) + 's');
+    b.style.animationDelay = (Math.random()*-12) + 's';
+    b.innerHTML = `
+      <defs>
+        <radialGradient id="g${i}">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/>
+          <stop offset="70%" stop-color="#aee1ff" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#6ec6ff" stop-opacity=".0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="32" cy="32" r="30" fill="url(#g${i})" />
+    `;
+    burbujas.appendChild(b);
+  }
+
+  /* ====== PATITOS DINÁMICOS (SVG) ====== */
+  const patos = document.getElementById('patos');
+  function patoSVG(){
+    const d = document.createElement('div');
+    d.className = 'pato';
+    d.style.left = Math.random()*100 + 'vw';
+    d.style.animationDuration = (10 + Math.random()*8) + 's';
+    d.style.opacity = .8;
+    d.innerHTML = `
+      <svg viewBox="0 0 64 48" width="64" height="48">
+        <path d="M12 30c-6 0-10-6-8-10 4 2 8 0 10-4 1-3 0-6 4-8 5-3 12 1 12 6 8-6 18-2 18 6 10 2 12 14 2 20-8 5-34 5-38-10z" fill="#ffdf6e" stroke="#e0b84a" stroke-width="1"/>
+        <path d="M46 20 l8 -2 v6 l-8 -2 z" fill="#ff8b3d"/>
+        <circle cx="40" cy="18" r="2" fill="#333"/>
+      </svg>
+    `;
+    return d;
+  }
+  for(let i=0;i<10;i++){
+    const p = patoSVG();
+    p.style.animationDelay = (Math.random()*-14)+'s';
+    patos.appendChild(p);
+  }
+  // nuevos patos esporádicos
+  setInterval(()=>{ patos.appendChild(patoSVG()); }, 5000);
+
+  /* ====== REFERENCIAS UI ====== */
+  const abrirBtn = document.getElementById('abrirBtn');
+  const emojiSobre = document.getElementById('emojiSobre');
+  const flash = document.getElementById('flash');
+  const intro = document.getElementById('intro');
+  const paginas = document.getElementById('paginas');
+  const bgMusic = document.getElementById('bgMusic');
+  const muteBtn = document.getElementById('muteBtn');
+
+  /* ====== PAGINACIÓN ====== */
+  function mostrarPagina(n){
+    const hojas = ['hoja1','hoja2','hoja3','hoja4'];
+    hojas.forEach((id,i)=>{
+      document.getElementById(id).style.display = (i===n-1)?'block':'none';
+    });
+  }
+
+  /* ====== AUDIO MUTE/UNMUTE ====== */
+  let muted = true;
+  function updateMuteUI(){
+    muteBtn.textContent = muted ? '🔇' : '🔊';
+    bgMusic.muted = muted;
+  }
+  muteBtn.addEventListener('click', async ()=>{
+    // si aún no ha iniciado, iniciamos al tocar el botón
+    if(bgMusic.paused){
+      try{ await bgMusic.play(); }catch(e){}
+    }
+    muted = !muted;
+    updateMuteUI();
+  });
+  updateMuteUI();
+
+  /* ====== INTRO: abrir invitación ====== */
+  abrirBtn.addEventListener('click', async ()=>{
+    emojiSobre.classList.add('shake');
+    setTimeout(()=> emojiSobre.classList.remove('shake'), 600);
+
+    // iniciar música (desmutear si estaba muteado) pero respetar el estado visual
+    try{
+      await bgMusic.play();
+    }catch(e){/* ignorar bloqueo si existe */}
+    // mantenemos el estado 'muted' según el botón
+    updateMuteUI();
+
+    // flash + mostrar páginas
+    setTimeout(()=>{
+      flash.classList.add('mostrar');
+      setTimeout(()=>{
+        flash.classList.remove('mostrar');
+        intro.style.display = 'none';
+        paginas.style.display = 'grid';
+        mostrarPagina(1);
+      }, 900);
+    }, 300);
+  });
+
+  /* ====== VOTOS (localStorage) ====== */
+  const voteAKey='votos_nino', voteRKey='votos_nina';
+  let votosNino = parseInt(localStorage.getItem(voteAKey)||'0',10);
+  let votosNina = parseInt(localStorage.getItem(voteRKey)||'0',10);
+
+  const barAzul = document.getElementById('barAzul');
+  const barRosa = document.getElementById('barRosa');
+  const countNino = document.getElementById('countNino');
+  const countNina = document.getElementById('countNina');
+
+  function renderVotos(){
+    const total = Math.max(1, votosNino + votosNina); // evitar div/0
+    const pA = Math.round((votosNino/total)*100);
+    const pR = 100 - pA;
+    barAzul.style.setProperty('--h', Math.max(6, pA) + '%');
+    barRosa.style.setProperty('--h', Math.max(6, pR) + '%');
+    countNino.textContent = votosNino;
+    countNina.textContent = votosNina;
+  }
+  renderVotos();
+
+  document.getElementById('votaNino').addEventListener('click', ()=>{
+    votosNino++; localStorage.setItem(voteAKey, votosNino); renderVotos();
+  });
+  document.getElementById('votaNina').addEventListener('click', ()=>{
+    votosNina++; localStorage.setItem(voteRKey, votosNina); renderVotos();
+  });
+</script>
+</body>
+</html>
