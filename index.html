@@ -33,7 +33,7 @@ body{
 }
 
 /* ====== BURBUJAS ====== */
-#burbujas{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+#burbujas{ position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;}
 .burbuja{
   position:absolute; bottom:-80px;
   width: var(--s,32px); height: var(--s,32px);
@@ -48,7 +48,7 @@ body{
 }
 
 /* ====== PATITOS (SVG) ====== */
-#patos{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+#patos{ position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;}
 .pato{
   position:absolute; top:-80px;
   width:64px; height:48px;
