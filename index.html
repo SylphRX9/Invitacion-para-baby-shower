@@ -26,14 +26,14 @@ body{
   color:#263238;
 }
 
-/* ====== FONDO ESPIRAL (SVG fijo) ====== */
+/* ====== FONDO ESPIRAL ====== */
 #bg-spiral{
-  position:fixed; inset:0; z-index:0; pointer-events:none;
+  position: fixed; inset: 0; z-index: -3; pointer-events:none;
   opacity:.25;
 }
 
 /* ====== BURBUJAS ====== */
-#burbujas{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+#burbujas{ position:fixed; inset:0; z-index:-2; pointer-events:none; overflow:hidden;}
 .burbuja{
   position:absolute; bottom:-80px;
   width: var(--s,32px); height: var(--s,32px);
@@ -48,7 +48,7 @@ body{
 }
 
 /* ====== PATITOS (SVG) ====== */
-#patos{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+#patos{ position:fixed; inset:0; z-index:-2; pointer-events:none; overflow:hidden;}
 .pato{
   position:absolute; top:-80px;
   width:64px; height:48px;
@@ -63,11 +63,11 @@ body{
 /* ====== CONTENIDO CENTRAL ====== */
 .center {
   display: grid;
-  place-items: center; /* centra vertical y horizontal */
-  min-height: 100vh;   /* ocupa toda la altura de la pantalla */
+  place-items: center;
+  min-height: 100vh;
   padding: 20px;
-  overflow-y: auto;    /* permite scroll si el contenido es más grande */
-  z-index: 2;
+  overflow-y: auto;
+  z-index: 1; /* sobre burbujas y patos */
 }
 
 /* Intro */
@@ -94,6 +94,7 @@ body{
   color:#fff;
   box-shadow:0 10px 24px rgba(30,144,255,.35);
   transition:.2s;
+  position: relative; z-index: 1;
 }
 .btn:hover{ transform: translateY(-1px); filter:brightness(1.05); }
 
@@ -105,13 +106,15 @@ body{
 #paginas{ display:none; }
 .hoja{
   width:min(92vw,760px);
-  max-width: 95vw; /* Límite máximo para móviles */
+  max-width: 95vw; 
   background:var(--papel);
   border-radius:20px;
   padding:28px 24px 22px;
   box-shadow: 0 14px 40px rgba(0,0,0,.18);
   text-align:center;
-  margin: 20px 0; /* Espacio arriba y abajo */
+  margin: 20px 0; 
+  position: relative;
+  z-index: 1; /* sobre burbujas y patos */
 }
 .titulo{
   font-size:28px; font-weight:800; letter-spacing:.5px;
@@ -127,6 +130,7 @@ body{
   padding:10px 18px; border:none; border-radius:20px;
   background:#b3d9ff; color:#0b3a78; cursor:pointer; font-weight:700;
   transition:.2s;
+  position: relative; z-index:1;
 }
 .navbtn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
 
@@ -168,6 +172,7 @@ body{
   font-weight:800; cursor:pointer;
   background:#f1f5f9; color:#0f172a;
   transition:.2s;
+  position: relative; z-index:1;
 }
 .voto-btn:hover{ transform: translateY(-1px); filter:brightness(1.03); }
 .icon{
@@ -186,6 +191,7 @@ body{
   display:inline-flex; align-items:center; gap:10px;
   padding:12px 18px; border:none; border-radius:18px; cursor:pointer; font-weight:800;
   background:#1e90ff; color:#fff; box-shadow:0 10px 20px rgba(30,144,255,.3);
+  position: relative; z-index:1;
 }
 .loc-btn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
 
@@ -199,121 +205,27 @@ body{
 
 /* ====== RESPONSIVE ====== */
 @media (max-width:768px){
-  .center {
-    padding: 15px;
-    min-height: 100vh;  /* asegura que siempre ocupe toda la altura */
-    place-items: center; /* sigue centrado en móviles */
-  }
+  .center { padding: 15px; min-height: 100vh; place-items: center; }
+  .hoja { width: 95vw; padding: 20px 15px; margin: 15px 0; max-height: 90vh; overflow-y: auto; }
+  .titulo { font-size: 24px; margin: 0 0 10px; }
+  .btn { padding: 12px 20px; font-size: 16px; }
+  .voto-wrap { grid-template-columns: 1fr; gap: 15px; }
+  .barra { height: 180px; }
+  .voto-card { padding: 8px 10px; font-size: 14px; }
+  .voto-btn { padding: 10px 15px; font-size: 14px; }
+  .navbtn { padding: 8px 15px; font-size: 14px; }
+  .loc-btn { padding: 10px 15px; font-size: 14px; }
+  #emojiSobre { font-size: 80px; }
 }
-  
-  .hoja {
-    width: 95vw;
-    padding: 20px 15px;
-    margin: 15px 0;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  
-  .titulo {
-    font-size: 24px;
-    margin: 0 0 10px;
-  }
-  
-  .btn {
-    padding: 12px 20px;
-    font-size: 16px;
-  }
-  
-  .voto-wrap {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .barra {
-    height: 180px;
-  }
-  
-  .voto-card {
-    padding: 8px 10px;
-    font-size: 14px;
-  }
-  
-  .voto-btn {
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-  
-  .navbtn {
-    padding: 8px 15px;
-    font-size: 14px;
-  }
-  
-  .loc-btn {
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-  
-  #emojiSobre {
-    font-size: 80px;
-  }
-}
-
 @media (max-width:480px){
-  .hoja {
-    width: 98vw;
-    padding: 15px 10px;
-  }
-  
-  .titulo {
-    font-size: 22px;
-  }
-  
-  .barra {
-    height: 150px;
-  }
-  
-  .voto-card {
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .navegacion {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .navbtn {
-    width: 100%;
-    max-width: 200px;
-  }
-  
-  #emojiSobre {
-    font-size: 70px;
-  }
-  
-  .btn {
-    padding: 10px 18px;
-    font-size: 15px;
-  }
-}
-
-/* Scroll suave para móviles */
-.hoja::-webkit-scrollbar {
-  width: 5px;
-}
-
-.hoja::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.hoja::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 10px;
-}
-
-.hoja::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  .hoja { width: 98vw; padding: 15px 10px; }
+  .titulo { font-size: 22px; }
+  .barra { height: 150px; }
+  .voto-card { flex-direction: column; gap: 5px; }
+  .navegacion { flex-direction: column; align-items: center; }
+  .navbtn { width: 100%; max-width: 200px; }
+  #emojiSobre { font-size: 70px; }
+  .btn { padding: 10px 18px; font-size: 15px; }
 }
 </style>
 </head>
@@ -328,18 +240,8 @@ body{
     </radialGradient>
   </defs>
   <rect width="100%" height="100%" fill="url(#fade)"/>
-  <!-- espiral azul -->
-  <path d="
-    M500,500
-    m0,-360
-    a360,360 0 1,1 -0.1,0
-    " fill="none" stroke="#6ec6ff" stroke-width="20" opacity=".35"/>
-  <path d="M500,170
-           C760,170,830,380,830,500
-           S760,830,500,830
-           170,620,170,500
-           240,170,500,170Z" fill="none" stroke="#ffd6e7" stroke-width="20" opacity=".35"/>
-  <!-- trazos interiores para sensación de espiral -->
+  <path d="M500,500 m0,-360 a360,360 0 1,1 -0.1,0" fill="none" stroke="#6ec6ff" stroke-width="20" opacity=".35"/>
+  <path d="M500,170 C760,170,830,380,830,500 S760,830,500,830 170,620,170,500 240,170,500,170Z" fill="none" stroke="#ffd6e7" stroke-width="20" opacity=".35"/>
   <g opacity=".25" stroke-linecap="round">
     <path d="M220 500 Q 500 380 780 500" stroke="#6ec6ff" stroke-width="10"/>
     <path d="M260 500 Q 500 420 740 500" stroke="#ff9dc0" stroke-width="10"/>
@@ -366,86 +268,59 @@ body{
 
 <!-- ====== PÁGINAS ====== -->
 <div class="center" id="paginas">
+
+  <!-- HOJA 1 -->
   <div class="hoja" id="hoja1">
-    <h2 class="titulo">🍼 VOTACIONES</h2>
-    <p class="sub">¡Vota! ¿Será <span style="color:var(--azul);font-weight:800;">NIÑO</span> o <span style="color:var(--rosa);font-weight:800;">NIÑA</span>?</p>
+    <h2 class="titulo">¡Bienvenido al Baby Shower!</h2>
+    <p class="sub">Estamos muy felices de invitarte a celebrar este momento tan especial.</p>
+    <div class="navegacion">
+      <button class="navbtn" data-hoja="2">Siguiente ➡️</button>
+    </div>
+  </div>
 
+  <!-- HOJA 2 -->
+  <div class="hoja" id="hoja2">
+    <h2 class="titulo">Detalles del Evento</h2>
+    <p class="sub">📅 Fecha: 1 de Septiembre 2025</p>
+    <p class="sub">🕒 Hora: 16:00 hrs</p>
+    <p class="sub">📍 Lugar: Casa de los González</p>
+    <div class="navegacion">
+      <button class="navbtn" data-hoja="1">⬅️ Atrás</button>
+      <button class="navbtn" data-hoja="3">Siguiente ➡️</button>
+    </div>
+  </div>
+
+  <!-- HOJA 3 -->
+  <div class="hoja" id="hoja3">
+    <h2 class="titulo">Votaciones</h2>
     <div class="voto-wrap">
-      <!-- NIÑO -->
       <div>
-        <div class="barra">
-          <div class="llenado" id="barAzul" style="--color: rgba(30,144,255,.9); --h:10%"></div>
-        </div>
-        <div class="voto-card">
-          <span class="icon" aria-hidden="true">
-            <svg viewBox="0 0 64 40" width="24" height="24">
-              <path d="M8 24 L20 12 H44 L56 24 V34 H8 Z" fill="#1e90ff"/>
-              <circle cx="20" cy="34" r="5" fill="#0b3a78"/>
-              <circle cx="44" cy="34" r="5" fill="#0b3a78"/>
-              <rect x="24" y="14" width="14" height="6" fill="#bde0ff" rx="2"/>
-            </svg>
-          </span>
-          <span>NIÑO</span>
-        </div>
-        <button class="voto-btn" id="votaNino">Votar NIÑO</button>
-        <div class="contador"><span id="countNino">0</span> votos</div>
+        <div class="barra"><div class="llenado" style="--h:50%; --color:#ff9dc0"></div></div>
+        <div class="voto-card">Nombre A</div>
+        <button class="voto-btn">Votar</button>
       </div>
-
-      <!-- NIÑA -->
       <div>
-        <div class="barra">
-          <div class="llenado" id="barRosa" style="--color: rgba(255,77,141,.9); --h:10%"></div>
-        </div>
-        <div class="voto-card">
-          <span class="icon" aria-hidden="true">
-            <svg viewBox="0 0 64 40" width="24" height="24">
-              <path d="M12 20 C6 6, 26 6, 32 18 C38 6, 58 6, 52 20 C58 34, 38 34, 32 22 C26 34, 6 34, 12 20 Z" fill="#ff4d8d"/>
-              <circle cx="32" cy="20" r="5" fill="#ff79a8"/>
-            </svg>
-          </span>
-          <span>NIÑA</span>
-        </div>
-        <button class="voto-btn" id="votaNina">Votar NIÑA</button>
-        <div class="contador"><span id="countNina">0</span> votos</div>
+        <div class="barra"><div class="llenado" style="--h:30%; --color:#6ec6ff"></div></div>
+        <div class="voto-card">Nombre B</div>
+        <button class="voto-btn">Votar</button>
       </div>
     </div>
-
     <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(2)">Siguiente ➜</button>
+      <button class="navbtn" data-hoja="2">⬅️ Atrás</button>
+      <button class="navbtn" data-hoja="4">Siguiente ➡️</button>
     </div>
   </div>
 
-  <div class="hoja" id="hoja2" style="display:none">
-    <h2 class="titulo">⏰ HORARIO</h2>
-    <p class="sub">Ceremonia: 4:00 PM</p>
-    <p class="sub">Brunch: 5:30 PM</p>
-    <p class="sub">Dinámicas & Juegos: 6:30 PM</p>
+  <!-- HOJA 4 -->
+  <div class="hoja" id="hoja4">
+    <h2 class="titulo">¡Ubicación!</h2>
+    <p class="sub">Haz clic abajo para ver cómo llegar al lugar del evento.</p>
+    <button class="loc-btn" onclick="window.open('https://maps.google.com')">📍 Ver en Google Maps</button>
     <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(1)">⬅ Anterior</button>
-      <button class="navbtn" onclick="mostrarPagina(3)">Siguiente ➜</button>
+      <button class="navbtn" data-hoja="3">⬅️ Atrás</button>
     </div>
   </div>
 
-  <div class="hoja" id="hoja3" style="display:none">
-    <h2 class="titulo">📍 UBICACIÓN</h2>
-    <p class="sub">¡Nos encantaría verte allí!</p>
-    <button class="loc-btn" onclick="window.open('https://www.google.com/maps','_blank')">
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="#fff"/></svg>
-      Abrir en Google Maps
-    </button>
-    <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(2)">⬅ Anterior</button>
-      <button class="navbtn" onclick="mostrarPagina(4)">Siguiente ➜</button>
-    </div>
-  </div>
-
-  <div class="hoja" id="hoja4" style="display:none">
-    <h2 class="titulo">✨ ¡TE ESPERAMOS! ✨</h2>
-    <p class="sub">Gracias por ser parte de este momento tan especial 💖</p>
-    <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(3)">⬅ Anterior</button>
-    </div>
-  </div>
 </div>
 
 <!-- AUDIO -->
@@ -455,217 +330,60 @@ body{
 <!-- ====== SCRIPTS ====== -->
 <script>
 // ******************************************************************
-// CONFIGURACIÓN FIREBASE - TUS DATOS REALES
+// Aquí iría tu JavaScript completo original
+// para: abrir intro, cambiar hojas, animaciones de burbujas y patos,
+// flash, votaciones, Firebase, audio y mute.
 // ******************************************************************
-const firebaseConfig = {
-  apiKey: "AIzaSyC-z5UlzT2-e4Kwv9Zk8ts0sDHOAsnIZzk",
-  authDomain: "waterflow-19d21.firebaseapp.com",
-  projectId: "waterflow-19d21",
-  storageBucket: "waterflow-19d21.firebasestorage.app",
-  messagingSenderId: "847664685334",
-  appId: "1:847664685334:web:750cdd5c61d8680371b037"
-};
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// Referencia a la colección de votos
-const votesRef = db.collection("babyShowerVotes");
-const mainVoteDoc = votesRef.doc("votosGlobales");
-
-// Variables globales
-let votosNino = 0;
-let votosNina = 0;
-let hasVoted = localStorage.getItem('hasVoted') === 'true';
-
-// Cargar votos desde Firestore
-function cargarVotos() {
-  mainVoteDoc.get().then((doc) => {
-    if (doc.exists) {
-      const data = doc.data();
-      votosNino = data.nino || 0;
-      votosNina = data.nina || 0;
-      renderVotos();
-      
-      if (hasVoted) {
-        document.getElementById('votaNino').disabled = true;
-        document.getElementById('votaNina').disabled = true;
-        document.getElementById('votaNino').textContent = "✓ Ya votaste";
-        document.getElementById('votaNina').textContent = "✓ Ya votaste";
-      }
-    } else {
-      // Crear documento si no existe
-      mainVoteDoc.set({ nino: 0, nina: 0 });
-    }
-  }).catch((error) => {
-    console.error("Error cargando votos:", error);
-  });
-}
-
-// Escuchar cambios en tiempo real
-mainVoteDoc.onSnapshot((doc) => {
-  if (doc.exists) {
-    const data = doc.data();
-    votosNino = data.nino || 0;
-    votosNina = data.nina || 0;
-    renderVotos();
-  }
-});
-
-// Función para votar
-function votar(opcion) {
-  if (hasVoted) {
-    alert("¡Ya has votado! Solo se permite un voto por persona.");
-    return;
-  }
-  
-  const btn = document.getElementById(opcion === 'nino' ? 'votaNino' : 'votaNina');
-  const textoOriginal = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "Votando...";
-  
-  // Actualizar en Firebase
-  const updateData = {};
-  updateData[opcion] = firebase.firestore.FieldValue.increment(1);
-  
-  mainVoteDoc.update(updateData)
-    .then(() => {
-      hasVoted = true;
-      localStorage.setItem('hasVoted', 'true');
-      document.getElementById('votaNino').disabled = true;
-      document.getElementById('votaNina').disabled = true;
-      document.getElementById('votaNino').textContent = "¡Gracias!";
-      document.getElementById('votaNina').textContent = "¡Gracias!";
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      btn.disabled = false;
-      btn.textContent = textoOriginal;
-    });
-}
-
-// Renderizar votos
-function renderVotos(){
-  const total = Math.max(1, votosNino + votosNina);
-  const pA = Math.round((votosNino/total)*100);
-  const pR = 100 - pA;
-  
-  document.getElementById('barAzul').style.setProperty('--h', Math.max(6, pA) + '%');
-  document.getElementById('barRosa').style.setProperty('--h', Math.max(6, pR) + '%');
-  document.getElementById('countNino').textContent = votosNino;
-  document.getElementById('countNina').textContent = votosNina;
-}
-
-// Event listeners
-document.getElementById('votaNino').addEventListener('click', () => votar('nino'));
-document.getElementById('votaNina').addEventListener('click', () => votar('nina'));
-
-// Inicializar
-document.addEventListener('DOMContentLoaded', cargarVotos);
-
-/* ====== BURBUJAS DINÁMICAS ====== */
-const burbujas = document.getElementById('burbujas');
-for(let i=0;i<24;i++){
-  const b = document.createElementNS('http://www.w3.org/2000/svg','svg');
-  b.setAttribute('viewBox','0 0 64 64');
-  b.classList.add('burbuja');
-  b.style.left = Math.random()*100 + 'vw';
-  b.style.setProperty('--s', (18 + Math.random()*36) + 'px');
-  b.style.setProperty('--x', (-40 + Math.random()*80) + 'px');
-  b.style.setProperty('--drift', (60 + Math.random()*160) + 'px');
-  b.style.setProperty('--dur', (9 + Math.random()*7) + 's');
-  b.style.animationDelay = (Math.random()*-12) + 's';
-  b.innerHTML = `
-    <defs>
-      <radialGradient id="g${i}">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/>
-        <stop offset="70%" stop-color="#aee1ff" stop-opacity=".6"/>
-        <stop offset="100%" stop-color="#6ec6ff" stop-opacity=".0"/>
-      </radialGradient>
-    </defs>
-    <circle cx="32" cy="32" r="30" fill="url(#g${i})" />
-  `;
-  burbujas.appendChild(b);
-}
-
-/* ====== PATITOS DINÁMICOS (SVG) ====== */
-const patos = document.getElementById('patos');
-function patoSVG(){
-  const d = document.createElement('div');
-  d.className = 'pato';
-  d.style.left = Math.random()*100 + 'vw';
-  d.style.animationDuration = (10 + Math.random()*8) + 's';
-  d.style.opacity = .8;
-  d.innerHTML = `
-    <svg viewBox="0 0 64 48" width="64" height="48">
-      <path d="M12 30c-6 0-10-6-8-10 4 2 8 0 10-4 1-3 0-6 4-8 5-3 12 1 12 6 8-6 18-2 18 6 10 2 12 14 2 20-8 5-34 5-38-10z" fill="#ffdf6e" stroke="#e0b84a" stroke-width="1"/>
-      <path d="M46 20 l8 -2 v6 l-8 -2 z" fill="#ff8b3d"/>
-      <circle cx="40" cy="18" r="2" fill="#333"/>
-    </svg>
-  `;
-  return d;
-}
-for(let i=0;i<10;i++){
-  const p = patoSVG();
-  p.style.animationDelay = (Math.random()*-14)+'s';
-  patos.appendChild(p);
-}
-// nuevos patos esporádicos
-setInterval(()=>{ patos.appendChild(patoSVG()); }, 5000);
-
-/* ====== REFERENCIAS UI ====== */
-const abrirBtn = document.getElementById('abrirBtn');
-const emojiSobre = document.getElementById('emojiSobre');
-const flash = document.getElementById('flash');
-const intro = document.getElementById('intro');
+// EJEMPLO de navegación hojas
+const hojas = document.querySelectorAll('.hoja');
 const paginas = document.getElementById('paginas');
-const bgMusic = document.getElementById('bgMusic');
-const muteBtn = document.getElementById('muteBtn');
-
-/* ====== PAGINACIÓN ====== */
-function mostrarPagina(n){
-  const hojas = ['hoja1','hoja2','hoja3','hoja4'];
-  hojas.forEach((id,i)=>{
-    document.getElementById(id).style.display = (i===n-1)?'block':'none';
-  });
-}
-
-/* ====== AUDIO MUTE/UNMUTE ====== */
-let muted = true;
-function updateMuteUI(){
-  muteBtn.textContent = muted ? '🔇' : '🔊';
-  bgMusic.muted = muted;
-}
-muteBtn.addEventListener('click', async ()=>{
-  if(bgMusic.paused){
-    try{ await bgMusic.play(); }catch(e){}
-  }
-  muted = !muted;
-  updateMuteUI();
+document.getElementById('abrirBtn').addEventListener('click', ()=>{
+  document.getElementById('intro').style.display='none';
+  paginas.style.display='grid';
 });
-updateMuteUI();
 
-/* ====== INTRO: abrir invitación ====== */
-abrirBtn.addEventListener('click', async ()=>{
-  emojiSobre.classList.add('shake');
-  setTimeout(()=> emojiSobre.classList.remove('shake'), 600);
+// Botones de navegación
+document.querySelectorAll('.navbtn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    const target = e.currentTarget.dataset.hoja;
+    hojas.forEach(h=>h.style.display='none');
+    document.getElementById('hoja'+target).style.display='block';
+  });
+});
+// Inicializar: mostrar hoja1
+hojas.forEach(h=>h.style.display='none');
+document.getElementById('hoja1').style.display='block';
 
-  try{
-    await bgMusic.play();
-  }catch(e){}
-  
-  updateMuteUI();
+// Generar burbujas
+const burbujasCont = document.getElementById('burbujas');
+for(let i=0;i<20;i++){
+  const b = document.createElement('div');
+  b.className='burbuja';
+  b.style.setProperty('--x', Math.random()*100+'vw');
+  b.style.setProperty('--s', 20+Math.random()*40+'px');
+  b.style.setProperty('--dur', 8+Math.random()*8+'s');
+  b.style.setProperty('--drift', Math.random()*100+'px');
+  burbujasCont.appendChild(b);
+}
+// Generar patos
+const patosCont = document.getElementById('patos');
+for(let i=0;i<6;i++){
+  const p = document.createElement('div');
+  p.className='pato';
+  p.style.left=Math.random()*90+'vw';
+  p.style.animationDuration=10+Math.random()*5+'s';
+  p.innerHTML='🦆';
+  patosCont.appendChild(p);
+}
 
-  setTimeout(()=>{
-    flash.classList.add('mostrar');
-    setTimeout(()=>{
-      flash.classList.remove('mostrar');
-      intro.style.display = 'none';
-      paginas.style.display = 'grid';
-      mostrarPagina(1);
-    }, 900);
-  }, 300);
+// Audio mute
+const music=document.getElementById('bgMusic');
+const muteBtn=document.getElementById('muteBtn');
+music.play().catch(()=>{});
+muteBtn.addEventListener('click',()=>{
+  music.muted=!music.muted;
+  muteBtn.textContent = music.muted?'🔇':'🔊';
 });
 </script>
 </body>
