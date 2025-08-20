@@ -66,6 +66,7 @@ body{
   display:grid; place-items:center;
   z-index:2;
   padding:20px;
+  overflow-y: auto; /* Permite scroll si el contenido es muy largo */
 }
 
 /* Intro */
@@ -103,11 +104,13 @@ body{
 #paginas{ display:none; }
 .hoja{
   width:min(92vw,760px);
+  max-width: 95vw; /* Límite máximo para móviles */
   background:var(--papel);
   border-radius:20px;
   padding:28px 24px 22px;
   box-shadow: 0 14px 40px rgba(0,0,0,.18);
   text-align:center;
+  margin: 20px 0; /* Espacio arriba y abajo */
 }
 .titulo{
   font-size:28px; font-weight:800; letter-spacing:.5px;
@@ -194,9 +197,120 @@ body{
 #muteBtn:hover{ filter:brightness(1.05); }
 
 /* ====== RESPONSIVE ====== */
-@media (max-width:560px){
-  .voto-wrap{ grid-template-columns: 1fr; }
-  .barra{ height:200px; }
+@media (max-width:768px){
+  .center {
+    padding: 15px;
+    align-items: flex-start; /* Alinea al inicio para móviles */
+  }
+  
+  .hoja {
+    width: 95vw;
+    padding: 20px 15px;
+    margin: 15px 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .titulo {
+    font-size: 24px;
+    margin: 0 0 10px;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+  
+  .voto-wrap {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .barra {
+    height: 180px;
+  }
+  
+  .voto-card {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+  
+  .voto-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .navbtn {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+  
+  .loc-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  #emojiSobre {
+    font-size: 80px;
+  }
+}
+
+@media (max-width:480px){
+  .hoja {
+    width: 98vw;
+    padding: 15px 10px;
+  }
+  
+  .titulo {
+    font-size: 22px;
+  }
+  
+  .barra {
+    height: 150px;
+  }
+  
+  .voto-card {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .navegacion {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .navbtn {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  #emojiSobre {
+    font-size: 70px;
+  }
+  
+  .btn {
+    padding: 10px 18px;
+    font-size: 15px;
+  }
+}
+
+/* Scroll suave para móviles */
+.hoja::-webkit-scrollbar {
+  width: 5px;
+}
+
+.hoja::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.hoja::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.hoja::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 </style>
 </head>
