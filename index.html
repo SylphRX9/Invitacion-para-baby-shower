@@ -26,8 +26,172 @@ body{
   color:#263238;
 }
 
-/* [Mantén todos tus estilos CSS existentes aquí] */
-/* ... todo tu CSS anterior permanece igual ... */
+/* ====== FONDO ESPIRAL (SVG fijo) ====== */
+#bg-spiral{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  opacity:.25;
+}
+
+/* ====== BURBUJAS ====== */
+#burbujas{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+.burbuja{
+  position:absolute; bottom:-80px;
+  width: var(--s,32px); height: var(--s,32px);
+  opacity: .5;
+  animation: subir var(--dur,10s) linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes subir{
+  0%{ transform: translate(var(--x,0), 0) scale(1); opacity:.2; }
+  10%{ opacity:.6; }
+  100%{ transform: translate(calc(var(--x,0) + var(--drift, 120px)), -120vh) scale(1.1); opacity:0; }
+}
+
+/* ====== PATITOS (SVG) ====== */
+#patos{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+.pato{
+  position:absolute; top:-80px;
+  width:64px; height:48px;
+  animation: caer 12s linear infinite;
+  will-change: transform, opacity;
+}
+@keyframes caer{
+  0%{ transform: translateY(-10vh) rotate(0deg); opacity:.9; }
+  100%{ transform: translateY(120vh) rotate(45deg); opacity:.2; }
+}
+
+/* ====== CONTENIDO CENTRAL ====== */
+.center{
+  position:fixed; inset:0;
+  display:grid; place-items:center;
+  z-index:2;
+  padding:20px;
+}
+
+/* Intro */
+#intro{ text-align:center; }
+#emojiSobre{
+  font-size:110px; line-height:1;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.15));
+  display:block;
+}
+.shake{ animation: shake .6s ease; }
+@keyframes shake{
+  0%{ transform: translateX(0) }
+  25%{ transform: translateX(-10px) rotate(-8deg) }
+  50%{ transform: translateX(10px) rotate(8deg) }
+  75%{ transform: translateX(-6px) rotate(-6deg) }
+  100%{ transform: translateX(0) }
+}
+.btn{
+  margin-top:16px;
+  padding:14px 26px;
+  border:none; border-radius:28px;
+  font-size:18px; font-weight:700; cursor:pointer;
+  background: linear-gradient(135deg, var(--rosa), var(--azul));
+  color:#fff;
+  box-shadow:0 10px 24px rgba(30,144,255,.35);
+  transition:.2s;
+}
+.btn:hover{ transform: translateY(-1px); filter:brightness(1.05); }
+
+/* FLASH */
+#flash{position:fixed; inset:0; background:white; opacity:0; z-index:3; pointer-events:none; transition: opacity 1.2s ease;}
+#flash.mostrar{ opacity:1; }
+
+/* ====== HOJAS ====== */
+#paginas{ display:none; }
+.hoja{
+  width:min(92vw,760px);
+  background:var(--papel);
+  border-radius:20px;
+  padding:28px 24px 22px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.18);
+  text-align:center;
+}
+.titulo{
+  font-size:28px; font-weight:800; letter-spacing:.5px;
+  margin:0 0 12px;
+  color:#0f172a;
+}
+.sub{ margin:0 0 8px; color:#334155; }
+
+.navegacion{
+  margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+}
+.navbtn{
+  padding:10px 18px; border:none; border-radius:20px;
+  background:#b3d9ff; color:#0b3a78; cursor:pointer; font-weight:700;
+  transition:.2s;
+}
+.navbtn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
+
+/* ====== VOTACIONES ====== */
+.voto-wrap{
+  display:grid; grid-template-columns: 1fr 1fr; gap:18px;
+  margin-top:10px; align-items:end;
+}
+.barra{
+  position:relative;
+  height:220px;
+  background: #ffffff;
+  border-radius:18px;
+  box-shadow: inset 0 0 0 2px #e5e7eb;
+  display:flex; align-items:flex-end; justify-content:center;
+  padding:12px;
+}
+.llenado{
+  width:70%;
+  height: var(--h, 10%);
+  background: var(--color);
+  border-radius:12px;
+  transition: height .35s ease;
+  box-shadow: 0 10px 22px rgba(0,0,0,.12) inset;
+}
+.voto-card{
+  margin-top:10px;
+  background:#fff;
+  border-radius:16px;
+  padding:10px 12px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  font-weight:800;
+}
+.voto-btn{
+  margin-top:10px;
+  padding:12px 18px;
+  border:none; border-radius:16px;
+  font-weight:800; cursor:pointer;
+  background:#f1f5f9; color:#0f172a;
+  transition:.2s;
+}
+.voto-btn:hover{ transform: translateY(-1px); filter:brightness(1.03); }
+.icon{
+  width:28px; height:28px; display:inline-grid; place-items:center;
+  border-radius:50%;
+  background:#eef2ff;
+}
+
+.contador{
+  margin-top:6px; font-size:14px; color:#475569;
+}
+
+/* ====== UBICACIÓN botón ====== */
+.loc-btn{
+  margin-top:10px;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 18px; border:none; border-radius:18px; cursor:pointer; font-weight:800;
+  background:#1e90ff; color:#fff; box-shadow:0 10px 20px rgba(30,144,255,.3);
+}
+.loc-btn:hover{ filter:brightness(1.05); transform: translateY(-1px); }
+
+/* ====== BOTÓN MUTE (arriba) ====== */
+#muteBtn{
+  position:fixed; top:10px; right:10px; z-index:4;
+  width:44px; height:44px; border:none; border-radius:50%; cursor:pointer;
+  background:#111827; color:#fff; font-size:20px; box-shadow: 0 8px 18px rgba(0,0,0,.25);
+}
+#muteBtn:hover{ filter:brightness(1.05); }
 
 /* ====== RESPONSIVE ====== */
 @media (max-width:560px){
@@ -38,10 +202,32 @@ body{
 </head>
 <body>
 
-<!-- [Todo tu HTML anterior permanece igual] -->
 <!-- ====== FONDO ESPIRAL ====== -->
 <svg id="bg-spiral" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-  <!-- ... contenido del SVG ... -->
+  <defs>
+    <radialGradient id="fade" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#fade)"/>
+  <!-- espiral azul -->
+  <path d="
+    M500,500
+    m0,-360
+    a360,360 0 1,1 -0.1,0
+    " fill="none" stroke="#6ec6ff" stroke-width="20" opacity=".35"/>
+  <path d="M500,170
+           C760,170,830,380,830,500
+           S760,830,500,830
+           170,620,170,500
+           240,170,500,170Z" fill="none" stroke="#ffd6e7" stroke-width="20" opacity=".35"/>
+  <!-- trazos interiores para sensación de espiral -->
+  <g opacity=".25" stroke-linecap="round">
+    <path d="M220 500 Q 500 380 780 500" stroke="#6ec6ff" stroke-width="10"/>
+    <path d="M260 500 Q 500 420 740 500" stroke="#ff9dc0" stroke-width="10"/>
+    <path d="M300 500 Q 500 460 700 500" stroke="#6ec6ff" stroke-width="10"/>
+  </g>
 </svg>
 
 <!-- ====== BURBUJAS ====== -->
@@ -112,7 +298,37 @@ body{
     </div>
   </div>
 
-  <!-- ... otras páginas ... -->
+  <div class="hoja" id="hoja2" style="display:none">
+    <h2 class="titulo">⏰ HORARIO</h2>
+    <p class="sub">Ceremonia: 4:00 PM</p>
+    <p class="sub">Brunch: 5:30 PM</p>
+    <p class="sub">Dinámicas & Juegos: 6:30 PM</p>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(1)">⬅ Anterior</button>
+      <button class="navbtn" onclick="mostrarPagina(3)">Siguiente ➜</button>
+    </div>
+  </div>
+
+  <div class="hoja" id="hoja3" style="display:none">
+    <h2 class="titulo">📍 UBICACIÓN</h2>
+    <p class="sub">¡Nos encantaría verte allí!</p>
+    <button class="loc-btn" onclick="window.open('https://www.google.com/maps','_blank')">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="#fff"/></svg>
+      Abrir en Google Maps
+    </button>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(2)">⬅ Anterior</button>
+      <button class="navbtn" onclick="mostrarPagina(4)">Siguiente ➜</button>
+    </div>
+  </div>
+
+  <div class="hoja" id="hoja4" style="display:none">
+    <h2 class="titulo">✨ ¡TE ESPERAMOS! ✨</h2>
+    <p class="sub">Gracias por ser parte de este momento tan especial 💖</p>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(3)">⬅ Anterior</button>
+    </div>
+  </div>
 </div>
 
 <!-- AUDIO -->
@@ -122,15 +338,15 @@ body{
 <!-- ====== SCRIPTS ====== -->
 <script>
 // ******************************************************************
-// CONFIGURACIÓN FIREBASE - ¡REMPLAZA CON TUS VALORES REALES!
+// CONFIGURACIÓN FIREBASE - TUS DATOS REALES
 // ******************************************************************
 const firebaseConfig = {
-  apiKey: "TU_API_KEY_REAL_AQUI",
-  authDomain: "tu-proyecto-real.firebaseapp.com",
-  projectId: "tu-project-id-real",
-  storageBucket: "tu-proyecto-real.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:tu-app-id-real"
+  apiKey: "AIzaSyC-z5UlzT2-e4Kwv9Zk8ts0sDHOAsnIZzk",
+  authDomain: "waterflow-19d21.firebaseapp.com",
+  projectId: "waterflow-19d21",
+  storageBucket: "waterflow-19d21.firebasestorage.app",
+  messagingSenderId: "847664685334",
+  appId: "1:847664685334:web:750cdd5c61d8680371b037"
 };
 
 // Inicializar Firebase
@@ -141,16 +357,12 @@ const db = firebase.firestore();
 const votesRef = db.collection("babyShowerVotes");
 const mainVoteDoc = votesRef.doc("votosGlobales");
 
-// ******************************************************************
 // Variables globales
-// ******************************************************************
 let votosNino = 0;
 let votosNina = 0;
 let hasVoted = localStorage.getItem('hasVoted') === 'true';
 
-// ******************************************************************
-// FUNCIÓN: Cargar votos desde Firebase
-// ******************************************************************
+// Cargar votos desde Firestore
 function cargarVotos() {
   mainVoteDoc.get().then((doc) => {
     if (doc.exists) {
@@ -159,12 +371,11 @@ function cargarVotos() {
       votosNina = data.nina || 0;
       renderVotos();
       
-      // Si ya votó, deshabilitar botones
       if (hasVoted) {
         document.getElementById('votaNino').disabled = true;
         document.getElementById('votaNina').disabled = true;
-        document.getElementById('votaNino').textContent = "Ya votaste ✓";
-        document.getElementById('votaNina').textContent = "Ya votaste ✓";
+        document.getElementById('votaNino').textContent = "✓ Ya votaste";
+        document.getElementById('votaNina').textContent = "✓ Ya votaste";
       }
     } else {
       // Crear documento si no existe
@@ -175,25 +386,17 @@ function cargarVotos() {
   });
 }
 
-// ******************************************************************
-// FUNCIÓN: Escuchar cambios en tiempo real
-// ******************************************************************
-function escucharVotosEnTiempoReal() {
-  mainVoteDoc.onSnapshot((doc) => {
-    if (doc.exists) {
-      const data = doc.data();
-      votosNino = data.nino || 0;
-      votosNina = data.nina || 0;
-      renderVotos();
-    }
-  }, (error) => {
-    console.error("Error en tiempo real:", error);
-  });
-}
+// Escuchar cambios en tiempo real
+mainVoteDoc.onSnapshot((doc) => {
+  if (doc.exists) {
+    const data = doc.data();
+    votosNino = data.nino || 0;
+    votosNina = data.nina || 0;
+    renderVotos();
+  }
+});
 
-// ******************************************************************
-// FUNCIÓN: Votar
-// ******************************************************************
+// Función para votar
 function votar(opcion) {
   if (hasVoted) {
     alert("¡Ya has votado! Solo se permite un voto por persona.");
@@ -202,8 +405,6 @@ function votar(opcion) {
   
   const btn = document.getElementById(opcion === 'nino' ? 'votaNino' : 'votaNina');
   const textoOriginal = btn.textContent;
-  
-  // Mostrar loading
   btn.disabled = true;
   btn.textContent = "Votando...";
   
@@ -213,62 +414,38 @@ function votar(opcion) {
   
   mainVoteDoc.update(updateData)
     .then(() => {
-      // Marcar que ya votó
       hasVoted = true;
       localStorage.setItem('hasVoted', 'true');
-      
-      // Deshabilitar ambos botones
       document.getElementById('votaNino').disabled = true;
       document.getElementById('votaNina').disabled = true;
-      document.getElementById('votaNino').textContent = "¡Gracias por votar!";
-      document.getElementById('votaNina').textContent = "¡Gracias por votar!";
+      document.getElementById('votaNino').textContent = "¡Gracias!";
+      document.getElementById('votaNina').textContent = "¡Gracias!";
     })
     .catch((error) => {
-      console.error("Error al votar:", error);
-      alert("Ocurrió un error. Intenta nuevamente.");
-      
-      // Restaurar botón
+      console.error("Error:", error);
       btn.disabled = false;
       btn.textContent = textoOriginal;
     });
 }
 
-// ******************************************************************
-// FUNCIÓN: Renderizar votos (igual que antes)
-// ******************************************************************
+// Renderizar votos
 function renderVotos(){
   const total = Math.max(1, votosNino + votosNina);
   const pA = Math.round((votosNino/total)*100);
   const pR = 100 - pA;
   
-  const barAzul = document.getElementById('barAzul');
-  const barRosa = document.getElementById('barRosa');
-  const countNino = document.getElementById('countNino');
-  const countNina = document.getElementById('countNina');
-  
-  barAzul.style.setProperty('--h', Math.max(6, pA) + '%');
-  barRosa.style.setProperty('--h', Math.max(6, pR) + '%');
-  countNino.textContent = votosNino;
-  countNina.textContent = votosNina;
+  document.getElementById('barAzul').style.setProperty('--h', Math.max(6, pA) + '%');
+  document.getElementById('barRosa').style.setProperty('--h', Math.max(6, pR) + '%');
+  document.getElementById('countNino').textContent = votosNino;
+  document.getElementById('countNina').textContent = votosNina;
 }
 
-// ******************************************************************
-// EVENT LISTENERS para votación
-// ******************************************************************
+// Event listeners
 document.getElementById('votaNino').addEventListener('click', () => votar('nino'));
 document.getElementById('votaNina').addEventListener('click', () => votar('nina'));
 
-// ******************************************************************
-// INICIALIZACIÓN
-// ******************************************************************
-document.addEventListener('DOMContentLoaded', function() {
-  cargarVotos();
-  escucharVotosEnTiempoReal();
-});
-
-// ******************************************************************
-// [El resto de tu código JavaScript permanece IGUAL]
-// ******************************************************************
+// Inicializar
+document.addEventListener('DOMContentLoaded', cargarVotos);
 
 /* ====== BURBUJAS DINÁMICAS ====== */
 const burbujas = document.getElementById('burbujas');
